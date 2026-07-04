@@ -585,23 +585,12 @@ def render_upload_page() -> None:
             st.dataframe(df.head(30), use_container_width=True)
 
 
-def render_deploy_notes() -> None:
-    st.markdown(
-        '<div class="section-banner"><strong>어른들을 위한 메모</strong><br>이 앱을 설명하거나 배포할 때 참고할 수 있는 간단한 안내예요.</div>',
-        unsafe_allow_html=True,
-    )
-    st.write("- `CV 구경하기`는 설명형 예제 영역입니다.")
-    st.write("- `내 영상 실험실`은 실제 업로드 테스트 영역입니다.")
-    st.write("- Streamlit Community Cloud에서는 교육용 소개와 가벼운 테스트에 적합합니다.")
-    st.write("- 긴 영상과 GPU 추론은 로컬 또는 별도 GPU 서버가 더 안정적입니다.")
-
-
 st.set_page_config(page_title="서윤이와 수호를 위한 CV 놀이터", layout="wide")
 inject_global_styles()
 
 page = st.sidebar.radio(
     "어디로 가볼까?",
-    options=["CV 구경하기", "내 영상 실험실", "어른들을 위한 메모"],
+    options=["CV 구경하기", "내 영상 실험실"],
     index=0,
 )
 
@@ -610,11 +599,8 @@ if page == "CV 구경하기":
     render_hero()
     render_feature_cards()
     render_upload_ideas()
-elif page == "내 영상 실험실":
+else:
     render_hero()
     render_feature_cards()
     render_upload_ideas()
     render_upload_page()
-else:
-    render_hero()
-    render_deploy_notes()
