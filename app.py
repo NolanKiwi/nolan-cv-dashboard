@@ -439,7 +439,7 @@ def render_example_gallery() -> None:
                 for note in example["notes"]:
                     st.write(f"- {note}")
                 st.code(example["official_path_label"], language="text")
-                st.link_button("공식 예제 보기", example["official_url"])
+                st.caption("이 예제는 공식 supervision 예제를 바탕으로 미리보기 영상으로 정리해둔 것입니다.")
                 if example["preview_path"].exists():
                     st.success(
                         f"미리보기 준비됨: {example['preview_path'].name} "
@@ -599,10 +599,6 @@ def render_deploy_notes() -> None:
 st.set_page_config(page_title="서윤이와 수호를 위한 CV 놀이터", layout="wide")
 inject_global_styles()
 
-render_hero()
-render_feature_cards()
-render_upload_ideas()
-
 page = st.sidebar.radio(
     "어디로 가볼까?",
     options=["CV 구경하기", "내 영상 실험실", "어른들을 위한 메모"],
@@ -611,7 +607,14 @@ page = st.sidebar.radio(
 
 if page == "CV 구경하기":
     render_example_gallery()
+    render_hero()
+    render_feature_cards()
+    render_upload_ideas()
 elif page == "내 영상 실험실":
+    render_hero()
+    render_feature_cards()
+    render_upload_ideas()
     render_upload_page()
 else:
+    render_hero()
     render_deploy_notes()
