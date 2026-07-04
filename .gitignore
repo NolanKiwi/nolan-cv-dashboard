@@ -1,0 +1,23 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+outputs/
+samples/
+vendor/
+
+yolov8*.pt
+yolo11*.pt
+*.mov
+
+results_*.jsonl
+results_*.csv
+
+# Keep deployable preview assets and app config tracked.
+!assets/
+!assets/examples/
+!assets/examples/*.mp4
+!.streamlit/
+!.streamlit/config.toml
