@@ -149,6 +149,7 @@ def inject_global_styles() -> None:
             background:
                 radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 25%),
                 radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 28%),
+                radial-gradient(circle at 20% 18%, rgba(255,255,255,0.45), transparent 18%),
                 linear-gradient(180deg, var(--paper) 0%, #efe4c7 100%);
             color: var(--ink);
             font-family: "Noto Sans KR", sans-serif;
@@ -191,6 +192,61 @@ def inject_global_styles() -> None:
             border-radius: 24px;
             padding: 1rem 1.2rem;
             margin-top: 0.5rem;
+        }
+
+        .landing-hero {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(135deg, rgba(255,255,255,0.92), rgba(255,248,230,0.82)),
+                linear-gradient(90deg, rgba(15,118,110,0.08), rgba(249,115,22,0.08));
+            border: 1px solid rgba(18, 78, 102, 0.12);
+            border-radius: 30px;
+            padding: 1.4rem 1.4rem 1.2rem 1.4rem;
+            box-shadow: 0 18px 40px rgba(34, 49, 63, 0.08);
+            margin-bottom: 1rem;
+        }
+
+        .landing-hero:before {
+            content: "";
+            position: absolute;
+            right: -50px;
+            top: -50px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(249,115,22,0.22), transparent 65%);
+        }
+
+        .landing-hero:after {
+            content: "";
+            position: absolute;
+            left: -40px;
+            bottom: -40px;
+            width: 160px;
+            height: 160px;
+            background: radial-gradient(circle, rgba(15,118,110,0.16), transparent 65%);
+        }
+
+        .illustration-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .doodle-card {
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(34,49,63,0.1);
+            border-radius: 22px;
+            padding: 0.9rem;
+            min-height: 150px;
+            position: relative;
+        }
+
+        .doodle-icon {
+            font-size: 2rem;
+            line-height: 1;
+            margin-bottom: 0.4rem;
         }
 
         .mini-card {
@@ -239,6 +295,12 @@ def inject_global_styles() -> None:
         .stCodeBlock, code {
             border-radius: 14px !important;
         }
+
+        @media (max-width: 900px) {
+            .illustration-strip {
+                grid-template-columns: 1fr;
+            }
+        }
         </style>
         """,
         unsafe_allow_html=True,
@@ -272,30 +334,51 @@ def mode_label(mode_key: str) -> str:
 def render_hero() -> None:
     st.title("서윤이와 수호를 위한 CV 놀이터")
     st.caption("컴퓨터가 영상을 보고 무엇을 알아낼 수 있는지 쉽고 재미있게 소개하는 공간")
-
-    col1, col2 = st.columns([1.5, 1.0])
-    with col1:
-        st.subheader("CV가 뭐야?")
-        st.write(
-            "CV는 `Computer Vision`의 줄임말이에요. 사람이 눈으로 보고 알아차리듯이, "
-            "컴퓨터도 사진이나 영상을 보고 사람, 자동차, 움직임, 숫자 같은 것을 찾아볼 수 있어요."
-        )
-        st.write(
-            "이 사이트에서는 준비된 예제를 먼저 구경하고, 그 다음에는 직접 영상을 올려서 "
-            "컴퓨터가 어떻게 장면을 이해하는지 실험해볼 수 있어요."
-        )
-    with col2:
-        st.markdown(
-            """
-            <div class="hero-note">
-                <strong>여기서 할 수 있는 것</strong><br>
-                1. 준비된 예제로 CV를 먼저 이해하기<br>
-                2. 내 mp4 영상을 올려 직접 실험하기<br>
-                3. 사람 수, 움직임, 구역 안 인원 수를 살펴보기
+    st.markdown(
+        """
+        <div class="landing-hero">
+            <h3 style="margin-top:0;">CV가 뭐야?</h3>
+            <p style="font-size:1.02rem;">
+                CV는 <strong>Computer Vision</strong>의 줄임말이에요.
+                사람이 눈으로 보고 알아차리듯이, 컴퓨터도 사진이나 영상을 보고
+                사람, 자동차, 움직임, 숫자 같은 것을 찾아볼 수 있어요.
+            </p>
+            <p style="font-size:1.02rem; margin-bottom:0.4rem;">
+                이 사이트에서는 준비된 예제를 먼저 구경하고,
+                그 다음에는 직접 영상을 올려서 컴퓨터가 어떻게 장면을 이해하는지 실험해볼 수 있어요.
+            </p>
+            <div class="illustration-strip">
+                <div class="doodle-card">
+                    <div class="doodle-icon">👀</div>
+                    <strong>찾아보기</strong>
+                    <p>영상 속 사람이나 자동차를 발견해요.</p>
+                </div>
+                <div class="doodle-card">
+                    <div class="doodle-icon">🏃</div>
+                    <strong>따라가기</strong>
+                    <p>같은 사람이 어디로 움직였는지 이어서 봐요.</p>
+                </div>
+                <div class="doodle-card">
+                    <div class="doodle-icon">📊</div>
+                    <strong>세어보기</strong>
+                    <p>몇 명이 보이는지, 구역 안에 몇 명인지 살펴봐요.</p>
+                </div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        """
+        <div class="hero-note">
+            <strong>이 사이트에서 할 수 있는 것</strong><br>
+            1. 준비된 예제로 CV를 먼저 이해하기<br>
+            2. 내 mp4 영상을 올려 직접 실험하기<br>
+            3. 사람 수, 움직임, 구역 안 인원 수를 살펴보기
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 
 def render_feature_cards() -> None:
