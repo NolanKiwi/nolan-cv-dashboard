@@ -153,21 +153,79 @@ def mode_label(mode_key: str) -> str:
     return mapping.get(mode_key, mode_key)
 
 
+def render_kids_intro() -> None:
+    st.title("서윤이와 수호를 위한 CV 놀이터")
+    st.caption("컴퓨터가 영상을 보고 무엇을 알아낼 수 있는지 쉽고 재미있게 보여주는 데모")
+
+    hero_col1, hero_col2 = st.columns([1.4, 1.1])
+    with hero_col1:
+        st.subheader("CV가 뭐야?")
+        st.write(
+            "CV는 `Computer Vision`의 줄임말이에요. "
+            "사람이 눈으로 보고 알아차리듯이, 컴퓨터도 사진이나 영상을 보고 "
+            "`사람이 어디 있는지`, `몇 명 있는지`, `어느 쪽으로 움직이는지` "
+            "같은 것을 찾아보는 기술이에요."
+        )
+        st.write(
+            "이 사이트에서는 축구 영상, 사람 많은 영상, 줄 서 있는 영상 같은 것을 올려서 "
+            "컴퓨터가 어떻게 장면을 이해하는지 직접 볼 수 있어요."
+        )
+    with hero_col2:
+        st.info(
+            "이 사이트는 두 부분으로 나뉘어요.\n"
+            "- `CV 구경하기`: 준비된 예제를 보는 곳\n"
+            "- `내 영상 실험실`: 직접 mp4를 올려 보는 곳"
+        )
+
+    st.subheader("컴퓨터가 할 수 있는 일")
+    feature_cols = st.columns(4)
+    cards = [
+        ("사람 찾기", "영상 속에서 사람이나 자동차 같은 대상을 찾아요."),
+        ("움직임 따라가기", "같은 사람이 어디로 움직였는지 이어서 봐요."),
+        ("숫자 세기", "화면에 몇 명이 있는지 세어볼 수 있어요."),
+        ("특정 구역 보기", "정해 둔 구역 안에 몇 명이 들어왔는지 볼 수 있어요."),
+    ]
+    for col, (title, body) in zip(feature_cols, cards):
+        with col:
+            st.markdown(f"**{title}**")
+            st.write(body)
+
+
+def render_upload_examples_for_kids() -> None:
+    st.subheader("어떤 영상을 올리면 재미있을까?")
+    st.write("아래 같은 영상을 올리면 결과가 잘 보이고, CV가 하는 일을 이해하기 쉬워요.")
+    idea_cols = st.columns(3)
+    ideas = [
+        (
+            "축구나 운동장 영상",
+            "선수들이 어디로 움직이는지 추적해볼 수 있어요.",
+        ),
+        (
+            "행사장이나 관중 영상",
+            "사람이 몇 명쯤 보이는지 세어볼 수 있어요.",
+        ),
+        (
+            "출입구나 줄 서 있는 영상",
+            "특정 구역 안에 몇 명이 들어오는지 볼 수 있어요.",
+        ),
+    ]
+    for col, (title, body) in zip(idea_cols, ideas):
+        with col:
+            st.markdown(f"**{title}**")
+            st.write(body)
+
+
 def render_header() -> None:
-    st.title("Nolan CV Dashboard")
-    st.caption("Official examples gallery + your own video testing workspace")
-    st.write(
-        "이 앱은 두 영역으로 분리되어 있습니다. "
-        "`Official Examples`는 참고용 쇼케이스이고, "
-        "`Run Your Video`는 직접 mp4를 올려 테스트하는 실제 분석 화면입니다."
-    )
+    render_kids_intro()
+    render_upload_examples_for_kids()
 
 
 def render_examples_intro() -> None:
-    st.header("Official Examples")
+    st.header("CV 구경하기")
     st.info(
-        "이 영역은 공식 예제를 보여주는 갤러리입니다. 여기서는 업로드를 하지 않습니다. "
-        "직접 테스트하려면 왼쪽 메뉴에서 `Run Your Video`로 이동하세요."
+        "이곳은 준비된 예제를 구경하는 곳이에요. "
+        "여기서는 이미 만들어 둔 결과를 보면서 "
+        "`컴퓨터가 영상을 어떻게 이해하는지`를 배울 수 있어요."
     )
 
 
@@ -200,7 +258,7 @@ def render_example_gallery() -> None:
 
 
 def render_mode_cards() -> None:
-    st.subheader("Available Test Modes")
+    st.subheader("내 영상으로 해볼 수 있는 실험")
     cols = st.columns(len(UPLOAD_MODES))
     for col, mode_info in zip(cols, UPLOAD_MODES):
         with col:
@@ -210,51 +268,51 @@ def render_mode_cards() -> None:
 
 
 def render_upload_page() -> None:
-    st.header("Run Your Video")
+    st.header("내 영상 실험실")
     st.success(
-        "이 영역이 실제 업로드 테스트 화면입니다. "
-        "mp4 또는 mov를 올리고 분석 모드를 골라서 바로 실행할 수 있습니다."
+        "여기는 진짜로 영상을 올려서 실험해보는 곳이에요. "
+        "mp4나 mov를 올리고, 어떤 방식으로 분석할지 고른 뒤 실행하면 됩니다."
     )
     render_mode_cards()
 
     with st.expander("What Do These Settings Mean?", expanded=False):
-        st.write("- `Mode`: 어떤 분석 방식으로 볼지 고릅니다.")
-        st.write("- `Model`: 더 정확한 대신 더 무거운 모델로 바꿀 수 있습니다.")
-        st.write("- `Image Size`: 입력 해상도입니다. 높이면 더 느리지만 작은 객체를 더 잘 볼 수 있습니다.")
-        st.write("- `Confidence`: 검출을 얼마나 엄격하게 채택할지 정합니다.")
-        st.write("- `Device Override`: `0`은 첫 GPU, `cpu`는 CPU 강제입니다.")
+        st.write("- `Mode`: 사람을 따라갈지, 숫자를 셀지, 특정 구역만 볼지 고르는 버튼이에요.")
+        st.write("- `Model`: 컴퓨터의 눈을 얼마나 가볍게 또는 꼼꼼하게 쓸지 정해요.")
+        st.write("- `Image Size`: 크게 보면 더 자세하지만 조금 느려질 수 있어요.")
+        st.write("- `Confidence`: 컴퓨터가 얼마나 확실할 때만 표시할지 정하는 기준이에요.")
+        st.write("- `Device Override`: GPU나 CPU 중 어떤 힘을 쓸지 정하는 옵션이에요.")
 
     with st.sidebar:
-        st.header("Video Analysis Settings")
+        st.header("실험 설정")
         mode = st.selectbox(
-            "Analysis Mode",
+            "어떤 실험을 해볼까?",
             options=[mode_info["key"] for mode_info in UPLOAD_MODES],
             format_func=mode_label,
         )
         model_name = st.selectbox(
-            "Detection Model",
+            "컴퓨터 눈 모델",
             options=["yolov8n.pt", "yolov8s.pt", "yolov8m.pt"],
             index=0,
         )
-        imgsz = st.slider("Image Size", min_value=640, max_value=1920, value=1280, step=64)
-        conf = st.slider("Confidence", min_value=0.05, max_value=0.9, value=0.25, step=0.05)
+        imgsz = st.slider("얼마나 크게 볼까?", min_value=640, max_value=1920, value=1280, step=64)
+        conf = st.slider("얼마나 확실해야 표시할까?", min_value=0.05, max_value=0.9, value=0.25, step=0.05)
         device = st.text_input(
-            "Device Override",
+            "장치 설정",
             value="",
             help="비워두면 자동 선택합니다. 로컬 GPU는 0, CPU 강제는 cpu 입니다.",
         )
 
     uploaded_file = st.file_uploader(
-        "Upload an MP4 or MOV file",
+        "여기에 MP4 또는 MOV 영상을 올려보세요",
         type=["mp4", "mov", "m4v", "avi"],
-        help="축구 중계, 행사장, 매장, 교통 영상처럼 사람이 잘 보이는 영상을 권장합니다.",
+        help="축구, 관중, 줄 서 있는 장면처럼 사람이 잘 보이는 영상을 추천해요.",
     )
 
     if uploaded_file is None:
-        st.warning("업로드는 여기에서 합니다. 위 박스를 눌러 전체 mp4도 직접 올릴 수 있습니다.")
+        st.warning("업로드는 여기에서 합니다. 위 박스를 눌러 전체 mp4도 직접 올릴 수 있어요.")
         return
 
-    st.subheader("Uploaded Video")
+    st.subheader("올린 영상")
     st.video(uploaded_file.getvalue())
 
     if st.button("Run Analysis", type="primary", use_container_width=True):
@@ -274,22 +332,22 @@ def render_upload_page() -> None:
                     conf=conf,
                 )
 
-        st.success("Analysis complete")
+        st.success("분석이 끝났어요")
 
         metric_cols = st.columns(4)
         with metric_cols[0]:
-            st.metric("Mode", mode_label(result["mode"]))
+            st.metric("실험 종류", mode_label(result["mode"]))
         with metric_cols[1]:
-            st.metric("Peak People", int(result["peak_people"]))
+            st.metric("가장 많이 보인 사람 수", int(result["peak_people"]))
         with metric_cols[2]:
-            st.metric("Peak In Zone", int(result["peak_zone_people"]))
+            st.metric("구역 안 최대 인원", int(result["peak_zone_people"]))
         with metric_cols[3]:
-            st.metric("Device", str(result["device"]))
+            st.metric("사용한 장치", str(result["device"]))
 
         csv_path = Path(result["csv_path"])
         output_video_path = Path(result["output_video_path"])
 
-        st.subheader("Annotated Result")
+        st.subheader("컴퓨터가 표시한 결과 영상")
         st.video(output_video_path.read_bytes())
 
         action_col1, action_col2 = st.columns(2)
@@ -303,7 +361,7 @@ def render_upload_page() -> None:
             )
         with action_col2:
             st.download_button(
-                label="Download Annotated Video",
+                label="결과 영상 다운로드",
                 data=output_video_path.read_bytes(),
                 file_name=output_video_path.name,
                 mime="video/mp4",
@@ -314,19 +372,19 @@ def render_upload_page() -> None:
         if not df.empty:
             chart_col1, chart_col2 = st.columns(2)
             with chart_col1:
-                st.subheader("People Count Over Time")
+                st.subheader("시간에 따라 사람 수가 어떻게 바뀌었을까?")
                 st.line_chart(df[["frame_index", "people_count"]].set_index("frame_index"))
             with chart_col2:
-                st.subheader("Zone Count Over Time")
+                st.subheader("구역 안 사람 수는 어떻게 바뀌었을까?")
                 st.line_chart(df[["frame_index", "in_zone_count"]].set_index("frame_index"))
             st.dataframe(df.head(30), use_container_width=True)
 
 
 def render_deploy_notes() -> None:
-    st.header("Deploy Notes")
-    st.write("- `Official Examples`는 쇼케이스 영역입니다.")
-    st.write("- `Run Your Video`는 실제 분석 영역입니다.")
-    st.write("- Streamlit Community Cloud에서는 예제 소개와 가벼운 테스트에 적합합니다.")
+    st.header("어른들을 위한 메모")
+    st.write("- `CV 구경하기`는 설명형 예제 영역입니다.")
+    st.write("- `내 영상 실험실`은 실제 업로드 테스트 영역입니다.")
+    st.write("- Streamlit Community Cloud에서는 교육용 소개와 가벼운 테스트에 적합합니다.")
     st.write("- 긴 영상과 GPU 추론은 로컬 또는 별도 GPU 서버가 더 안정적입니다.")
 
 
@@ -335,14 +393,14 @@ st.set_page_config(page_title="Nolan CV Dashboard", layout="wide")
 render_header()
 
 page = st.sidebar.radio(
-    "Workspace",
-    options=["Run Your Video", "Official Examples", "Deploy Notes"],
+    "어디로 가볼까?",
+    options=["내 영상 실험실", "CV 구경하기", "어른들을 위한 메모"],
     index=0,
 )
 
-if page == "Run Your Video":
+if page == "내 영상 실험실":
     render_upload_page()
-elif page == "Official Examples":
+elif page == "CV 구경하기":
     render_example_gallery()
 else:
     render_deploy_notes()
