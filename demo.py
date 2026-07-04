@@ -13,11 +13,17 @@ from ultralytics import YOLO
 
 
 PERSON_CLASS_ID = 0
+MODE_ALIASES = {
+    "football": "tracking",
+    "tracking": "tracking",
+    "crowd": "crowd",
+    "zone_count": "zone_count",
+}
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Supervision + YOLO demo for football tracking or crowd counting."
+        description="Supervision + YOLO demo for tracking, crowd counting, or zone counting."
     )
     parser.add_argument(
         "--source",
@@ -27,9 +33,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--mode",
-        choices=("football", "crowd"),
-        default="football",
-        help="football: track players, crowd: count people per frame.",
+        choices=tuple(MODE_ALIASES.keys()),
+        default="tracking",
+        help="tracking: trace people, crowd: count people, zone_count: count people inside the auto zone.",
     )
     parser.add_argument(
         "--model",
@@ -110,6 +116,24 @@ def attach_tracker_ids(detections: sv.Detections, result: Any) -> sv.Detections:
     return detections
 
 
+def build_center_zone(width: int, height: int) -> np.ndarray:
+    margin_x = int(width * 0.2)
+    margin_y = int(height * 0.2)
+    return np.array(
+        [
+            [margin_x, margin_y],
+            [width - margin_x, margin_y],
+            [width - margin_x, height - margin_y],
+            [margin_x, height - margin_y],
+        ],
+        dtype=np.int32,
+    )
+
+
+def normalize_mode(mode: str) -> str:
+    return MODE_ALIASES.get(mode, mode)
+
+
 def process_video(
     source: Path,
     mode: str,
@@ -119,9 +143,10 @@ def process_video(
     imgsz: int = 1280,
     conf: float = 0.25,
 ) -> dict[str, Any]:
+    normalized_mode = normalize_mode(mode)
     device = resolve_device(device_arg)
     output_video_path, csv_path = ensure_paths(source, output_dir)
-    writer, _, _, fps = open_writer(source, output_video_path)
+    writer, width, height, fps = open_writer(source, output_video_path)
 
     model = YOLO(model_name)
 
@@ -130,11 +155,18 @@ def process_video(
     trace_annotator = sv.TraceAnnotator(thickness=2, trace_length=max(15, int(fps)))
     corner_annotator = sv.BoxCornerAnnotator(thickness=2)
 
+    zone_polygon = build_center_zone(width, height)
+    polygon_zone = sv.PolygonZone(
+        polygon=zone_polygon,
+        triggering_anchors=(sv.Position.CENTER,),
+    )
+
     peak_people = 0
+    peak_zone_people = 0
 
     with csv_path.open("w", newline="", encoding="utf-8") as csv_file:
         csv_writer = csv.writer(csv_file)
-        csv_writer.writerow(["frame_index", "people_count", "tracked_ids"])
+        csv_writer.writerow(["frame_index", "people_count", "in_zone_count", "tracked_ids"])
 
         results = model.track(
             source=str(source),
@@ -157,17 +189,21 @@ def process_video(
             people_count = len(detections)
             peak_people = max(peak_people, people_count)
 
-            tracker_ids = []
+            tracker_ids: list[int] = []
             if detections.tracker_id is not None:
                 tracker_ids = [int(track_id) for track_id in detections.tracker_id.tolist()]
 
-            labels = []
-            if mode == "football":
-                labels = [f"player #{track_id}" for track_id in tracker_ids]
+            zone_mask = polygon_zone.trigger(detections) if len(detections) else np.array([], dtype=bool)
+            detections_in_zone = detections[zone_mask] if len(detections) else detections
+            in_zone_count = len(detections_in_zone)
+            peak_zone_people = max(peak_zone_people, in_zone_count)
 
             annotated = frame
-            if mode == "football":
-                if detections.tracker_id is not None:
+            labels: list[str] = []
+
+            if normalized_mode == "tracking":
+                labels = [f"person #{track_id}" for track_id in tracker_ids]
+                if detections.tracker_id is not None and len(detections):
                     annotated = trace_annotator.annotate(scene=annotated, detections=detections)
                 annotated = ellipse_annotator.annotate(scene=annotated, detections=detections)
                 annotated = corner_annotator.annotate(scene=annotated, detections=detections)
@@ -177,22 +213,46 @@ def process_video(
                         detections=detections,
                         labels=labels,
                     )
-            else:
+            elif normalized_mode == "crowd":
                 annotated = corner_annotator.annotate(scene=annotated, detections=detections)
                 annotated = label_annotator.annotate(
                     scene=annotated,
                     detections=detections,
                     labels=[f"person {idx + 1}" for idx in range(people_count)],
                 )
+            elif normalized_mode == "zone_count":
+                annotated = sv.draw_polygon(
+                    scene=annotated,
+                    polygon=zone_polygon,
+                    color=sv.Color.GREEN,
+                )
+                annotated = corner_annotator.annotate(scene=annotated, detections=detections)
+                if len(detections_in_zone):
+                    zone_labels = []
+                    if detections_in_zone.tracker_id is not None:
+                        zone_labels = [
+                            f"in zone #{track_id}"
+                            for track_id in detections_in_zone.tracker_id.tolist()
+                        ]
+                    else:
+                        zone_labels = ["in zone"] * len(detections_in_zone)
+                    annotated = label_annotator.annotate(
+                        scene=annotated,
+                        detections=detections_in_zone,
+                        labels=zone_labels,
+                    )
 
             overlay_lines = [
-                f"mode: {mode}",
+                f"mode: {normalized_mode}",
                 f"device: {device}",
                 f"people in frame: {people_count}",
-                f"peak count: {peak_people}",
+                f"peak people: {peak_people}",
             ]
-            if mode == "football" and tracker_ids:
+            if normalized_mode == "tracking" and tracker_ids:
                 overlay_lines.append(f"active tracks: {len(tracker_ids)}")
+            if normalized_mode == "zone_count":
+                overlay_lines.append(f"people in zone: {in_zone_count}")
+                overlay_lines.append(f"peak zone count: {peak_zone_people}")
 
             y = 30
             for line in overlay_lines:
@@ -209,15 +269,18 @@ def process_video(
                 y += 32
 
             writer.write(annotated)
-            csv_writer.writerow([frame_index, people_count, "|".join(map(str, tracker_ids))])
+            csv_writer.writerow(
+                [frame_index, people_count, in_zone_count, "|".join(map(str, tracker_ids))]
+            )
 
     writer.release()
     return {
         "output_video_path": output_video_path,
         "csv_path": csv_path,
         "peak_people": peak_people,
+        "peak_zone_people": peak_zone_people,
         "device": device,
-        "mode": mode,
+        "mode": normalized_mode,
         "model": model_name,
     }
 
@@ -235,6 +298,7 @@ def run_demo(args: argparse.Namespace) -> None:
     print(f"Finished. Annotated video: {result['output_video_path']}")
     print(f"Metrics CSV: {result['csv_path']}")
     print(f"Peak people count: {result['peak_people']}")
+    print(f"Peak zone count: {result['peak_zone_people']}")
     print(f"Device used: {result['device']}")
 
 

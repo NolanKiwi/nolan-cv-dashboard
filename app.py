@@ -17,93 +17,114 @@ EXAMPLES = [
     {
         "key": "tracking",
         "title": "Tracking",
-        "summary": "사람을 지속적으로 추적해서 같은 객체가 프레임 사이에서 어떻게 움직이는지 보여줍니다.",
-        "use_case": "축구 선수 동선 추적, 매장 방문자 추적, 공장 작업자 이동 분석",
+        "summary": "같은 사람을 프레임 사이에서 계속 연결해서 이동 궤적을 보여줍니다.",
+        "use_case": "선수 동선 추적, 매장 방문자 추적, 작업자 이동 분석",
         "official_path_label": "vendor/supervision/examples/tracking",
         "official_url": "https://github.com/roboflow/supervision/tree/develop/examples/tracking",
         "preview_path": ASSETS_DIR / "tracking_preview.mp4",
         "notes": [
-            "ByteTrack 기반으로 사람 ID를 유지합니다.",
-            "같은 사람을 프레임마다 다른 박스로 끝내지 않고, 이동 궤적까지 이어서 볼 수 있습니다.",
+            "같은 사람을 ID로 이어서 볼 수 있습니다.",
+            "움직임 패턴이나 동선을 보여주는 데 적합합니다.",
         ],
     },
     {
         "key": "heatmap_and_track",
         "title": "Heatmap And Track",
-        "summary": "사람이 자주 지나간 구역을 히트맵으로 누적해서 보여줍니다.",
-        "use_case": "유동 인구가 몰리는 구역 파악, 동선 시각화, 공간 재배치 근거 확보",
+        "summary": "사람이 자주 지나간 구역을 히트맵처럼 누적해서 시각화합니다.",
+        "use_case": "유동 인구 집중 구역 분석, 공간 재배치 근거 확보",
         "official_path_label": "vendor/supervision/examples/heatmap_and_track",
         "official_url": "https://github.com/roboflow/supervision/tree/develop/examples/heatmap_and_track",
         "preview_path": ASSETS_DIR / "heatmap_preview.mp4",
         "notes": [
-            "단순 카운트보다 공간 활용도를 훨씬 직관적으로 보여줍니다.",
-            "매장, 경기장 출입구, 행사장 동선 분석에 잘 맞습니다.",
+            "사람이 몰리는 위치를 직관적으로 보여줍니다.",
+            "카운트보다 공간 활용 분석에 더 적합합니다.",
         ],
     },
     {
         "key": "count_people_in_zone",
         "title": "Count People In Zone",
-        "summary": "지정한 구역 안에 현재 몇 명이 있는지 프레임 단위로 셉니다.",
-        "use_case": "대기열 관리, 매장 혼잡도 측정, 특정 구역 점유율 모니터링",
+        "summary": "지정된 구역 안에 현재 몇 명이 있는지 집계합니다.",
+        "use_case": "대기열 관리, 혼잡도 측정, 특정 구역 점유 분석",
         "official_path_label": "vendor/supervision/examples/count_people_in_zone",
         "official_url": "https://github.com/roboflow/supervision/tree/develop/examples/count_people_in_zone",
         "preview_path": ASSETS_DIR / "zone_count_preview.mp4",
         "notes": [
-            "폴리곤 존을 기준으로 사람 수를 집계합니다.",
-            "카메라 각도가 고정된 환경에서 특히 빠르게 적용할 수 있습니다.",
+            "폴리곤 존 안쪽 인원 수를 셉니다.",
+            "고정 카메라 환경에서 빠르게 적용하기 좋습니다.",
         ],
     },
     {
         "key": "traffic_analysis",
         "title": "Traffic Analysis",
-        "summary": "차량 흐름을 추적하고 도로 구간 분석에 필요한 시각화를 제공합니다.",
-        "use_case": "차량 흐름 파악, 차선별 모니터링, 교통량 분석 PoC",
+        "summary": "차량 흐름을 추적하고 도로 구간 분석에 필요한 시각화를 보여줍니다.",
+        "use_case": "교통 흐름 분석, 출입구 차량 모니터링",
         "official_path_label": "vendor/supervision/examples/traffic_analysis",
         "official_url": "https://github.com/roboflow/supervision/tree/develop/examples/traffic_analysis",
         "preview_path": ASSETS_DIR / "traffic_preview.mp4",
         "notes": [
-            "차량 검출과 추적을 조합한 교통 분석 예제입니다.",
-            "도로 CCTV, 진출입 램프, 주차장 출입구 분석으로 확장하기 좋습니다.",
+            "교통 CCTV PoC에 자주 쓰이는 패턴입니다.",
+            "차량 검출과 추적 흐름을 한 번에 볼 수 있습니다.",
         ],
     },
     {
         "key": "speed_estimation",
         "title": "Speed Estimation",
-        "summary": "차량 이동을 기반으로 속도 추정 시각화를 수행합니다.",
-        "use_case": "과속 감지 PoC, 도로 구간 비교, 차량 흐름 분석",
+        "summary": "이동량을 바탕으로 차량 속도 추정 시각화를 제공합니다.",
+        "use_case": "과속 감지 PoC, 도로 구간 비교",
         "official_path_label": "vendor/supervision/examples/speed_estimation",
         "official_url": "https://github.com/roboflow/supervision/tree/develop/examples/speed_estimation",
         "preview_path": ASSETS_DIR / "speed_preview.mp4",
         "notes": [
-            "실서비스 수준 정확도를 내려면 카메라 보정과 거리 기준점이 더 필요합니다.",
-            "그래도 PoC 단계에서 움직임 기반 속도 추정 흐름을 이해하기 좋습니다.",
+            "실서비스 전에는 카메라 보정이 더 필요합니다.",
+            "그래도 속도 분석 흐름을 설명하기에는 충분합니다.",
         ],
     },
     {
         "key": "time_in_zone_checkout",
         "title": "Time In Zone - Checkout",
-        "summary": "특정 구역 안에서 사람이 얼마나 오래 머무르는지 추적합니다.",
-        "use_case": "계산대 대기시간, 체류시간 분석, 혼잡 구간 체류 패턴 측정",
+        "summary": "특정 구역 안에 사람이 얼마나 오래 머무는지 측정합니다.",
+        "use_case": "계산대 대기시간, 체류시간 분석",
         "official_path_label": "vendor/supervision/examples/time_in_zone",
         "official_url": "https://github.com/roboflow/supervision/tree/develop/examples/time_in_zone",
         "preview_path": ASSETS_DIR / "time_checkout_preview.mp4",
         "notes": [
-            "공식 예제는 화면 표시 중심이라, 저장형 래퍼를 추가해 결과 mp4도 만들었습니다.",
-            "리테일 분석이나 대기열 모니터링에 바로 연결하기 좋은 패턴입니다.",
+            "리테일 대기열 분석에 잘 맞습니다.",
+            "단순 카운트보다 운영 지표에 가깝습니다.",
         ],
     },
     {
         "key": "time_in_zone_traffic",
         "title": "Time In Zone - Traffic",
-        "summary": "차량이나 객체가 관심 구역 안에 머무는 시간을 추적합니다.",
-        "use_case": "정체 구간 체류시간, 교차로 분석, 출입구 체류 패턴 확인",
+        "summary": "차량이나 객체가 관심 구역 안에 머무는 시간을 분석합니다.",
+        "use_case": "정체 구간 체류시간, 출입구 체류 패턴 분석",
         "official_path_label": "vendor/supervision/examples/time_in_zone",
         "official_url": "https://github.com/roboflow/supervision/tree/develop/examples/time_in_zone",
         "preview_path": ASSETS_DIR / "time_traffic_preview.mp4",
         "notes": [
-            "존 기반 dwell time 분석은 산업 현장과 교통 현장에서 모두 재사용성이 높습니다.",
-            "나중에 알람 조건과 결합하면 운영 자동화로 이어질 수 있습니다.",
+            "교통과 산업 현장 모두에 응용하기 좋습니다.",
+            "나중에 알람 조건과 결합하기 편한 유형입니다.",
         ],
+    },
+]
+
+UPLOAD_MODES = [
+    {
+        "key": "tracking",
+        "title": "People Tracking",
+        "summary": "같은 사람을 계속 추적하며 이동 궤적을 표시합니다.",
+        "best_for": "축구 선수 움직임, 행사장 방문자 동선",
+    },
+    {
+        "key": "crowd",
+        "title": "Crowd Counting",
+        "summary": "프레임마다 사람이 몇 명 보이는지 집계합니다.",
+        "best_for": "관중 수 추정, 행사장 혼잡도 파악",
+    },
+    {
+        "key": "zone_count",
+        "title": "Zone Count",
+        "summary": "화면 중앙 존 안에 들어온 사람 수를 따로 셉니다.",
+        "best_for": "대기 구역, 출입구, 특정 관심 구역 분석",
     },
 ]
 
@@ -123,15 +144,38 @@ def format_bytes(num_bytes: int) -> str:
     return f"{num_bytes} B"
 
 
-def render_example_gallery() -> None:
-    st.header("Official Example Gallery")
+def mode_label(mode_key: str) -> str:
+    mapping = {
+        "tracking": "People Tracking",
+        "crowd": "Crowd Counting",
+        "zone_count": "Zone Count",
+    }
+    return mapping.get(mode_key, mode_key)
+
+
+def render_header() -> None:
+    st.title("Nolan CV Dashboard")
+    st.caption("Official examples gallery + your own video testing workspace")
     st.write(
-        "`roboflow/supervision` 공식 예제를 실제로 실행한 결과를 한곳에서 비교할 수 있게 묶었습니다."
+        "이 앱은 두 영역으로 분리되어 있습니다. "
+        "`Official Examples`는 참고용 쇼케이스이고, "
+        "`Run Your Video`는 직접 mp4를 올려 테스트하는 실제 분석 화면입니다."
     )
 
+
+def render_examples_intro() -> None:
+    st.header("Official Examples")
+    st.info(
+        "이 영역은 공식 예제를 보여주는 갤러리입니다. 여기서는 업로드를 하지 않습니다. "
+        "직접 테스트하려면 왼쪽 메뉴에서 `Run Your Video`로 이동하세요."
+    )
+
+
+def render_example_gallery() -> None:
+    render_examples_intro()
     for example in EXAMPLES:
         with st.expander(example["title"], expanded=example["key"] == "tracking"):
-            col1, col2 = st.columns([1.2, 1.8])
+            col1, col2 = st.columns([1.1, 1.9])
             with col1:
                 st.subheader(example["title"])
                 st.write(example["summary"])
@@ -142,37 +186,53 @@ def render_example_gallery() -> None:
                 st.link_button("Open Official Example", example["official_url"])
                 if example["preview_path"].exists():
                     st.success(
-                        f"프리뷰 준비됨: {example['preview_path'].name} "
+                        f"Preview ready: {example['preview_path'].name} "
                         f"({format_bytes(example['preview_path'].stat().st_size)})"
                     )
                 else:
-                    st.warning("프리뷰 파일이 아직 없습니다.")
+                    st.warning("Preview file is missing.")
             with col2:
                 payload = read_bytes_if_exists(example["preview_path"])
                 if payload is not None:
                     st.video(payload)
                 else:
-                    st.info("이 환경에는 예제 프리뷰 영상이 아직 없습니다.")
+                    st.info("Preview video is not available in this environment.")
 
 
-def render_upload_lab() -> None:
-    st.header("Upload Lab")
-    st.write(
-        "직접 mp4 영상을 올려서 사람 추적 또는 군중 카운팅을 실행할 수 있습니다. "
-        "로컬 GPU 환경에서는 빠르게 돌고, Streamlit Cloud에서는 CPU 기준으로 더 느리게 동작할 수 있습니다."
+def render_mode_cards() -> None:
+    st.subheader("Available Test Modes")
+    cols = st.columns(len(UPLOAD_MODES))
+    for col, mode_info in zip(cols, UPLOAD_MODES):
+        with col:
+            st.markdown(f"**{mode_info['title']}**")
+            st.write(mode_info["summary"])
+            st.caption(f"추천 영상: {mode_info['best_for']}")
+
+
+def render_upload_page() -> None:
+    st.header("Run Your Video")
+    st.success(
+        "이 영역이 실제 업로드 테스트 화면입니다. "
+        "mp4 또는 mov를 올리고 분석 모드를 골라서 바로 실행할 수 있습니다."
     )
+    render_mode_cards()
+
+    with st.expander("What Do These Settings Mean?", expanded=False):
+        st.write("- `Mode`: 어떤 분석 방식으로 볼지 고릅니다.")
+        st.write("- `Model`: 더 정확한 대신 더 무거운 모델로 바꿀 수 있습니다.")
+        st.write("- `Image Size`: 입력 해상도입니다. 높이면 더 느리지만 작은 객체를 더 잘 볼 수 있습니다.")
+        st.write("- `Confidence`: 검출을 얼마나 엄격하게 채택할지 정합니다.")
+        st.write("- `Device Override`: `0`은 첫 GPU, `cpu`는 CPU 강제입니다.")
 
     with st.sidebar:
-        st.header("Inference Settings")
+        st.header("Video Analysis Settings")
         mode = st.selectbox(
-            "Mode",
-            options=["football", "crowd"],
-            format_func=lambda value: (
-                "Football Tracking" if value == "football" else "Crowd Counting"
-            ),
+            "Analysis Mode",
+            options=[mode_info["key"] for mode_info in UPLOAD_MODES],
+            format_func=mode_label,
         )
         model_name = st.selectbox(
-            "Model",
+            "Detection Model",
             options=["yolov8n.pt", "yolov8s.pt", "yolov8m.pt"],
             index=0,
         )
@@ -181,23 +241,24 @@ def render_upload_lab() -> None:
         device = st.text_input(
             "Device Override",
             value="",
-            help="로컬 GPU에서는 0, CPU 강제는 cpu. 비워두면 자동 선택합니다.",
+            help="비워두면 자동 선택합니다. 로컬 GPU는 0, CPU 강제는 cpu 입니다.",
         )
 
     uploaded_file = st.file_uploader(
         "Upload an MP4 or MOV file",
         type=["mp4", "mov", "m4v", "avi"],
-        help="축구 중계, 행사장, 매장, 교통 영상처럼 사람이 보이는 영상을 권장합니다.",
+        help="축구 중계, 행사장, 매장, 교통 영상처럼 사람이 잘 보이는 영상을 권장합니다.",
     )
 
     if uploaded_file is None:
-        st.info("샘플 영상을 먼저 둘러본 뒤, 직접 영상을 올려 테스트해보세요.")
+        st.warning("업로드는 여기에서 합니다. 위 박스를 눌러 전체 mp4도 직접 올릴 수 있습니다.")
         return
 
+    st.subheader("Uploaded Video")
     st.video(uploaded_file.getvalue())
 
-    if st.button("Run Analysis", type="primary"):
-        with st.spinner("Running detection and tracking..."):
+    if st.button("Run Analysis", type="primary", use_container_width=True):
+        with st.spinner("Running video analysis..."):
             with tempfile.TemporaryDirectory() as temp_dir_name:
                 temp_dir = Path(temp_dir_name)
                 input_path = temp_dir / uploaded_file.name
@@ -215,18 +276,20 @@ def render_upload_lab() -> None:
 
         st.success("Analysis complete")
 
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.metric("Peak People Count", int(result["peak_people"]))
-        with col2:
-            st.metric("Mode", result["mode"])
-        with col3:
+        metric_cols = st.columns(4)
+        with metric_cols[0]:
+            st.metric("Mode", mode_label(result["mode"]))
+        with metric_cols[1]:
+            st.metric("Peak People", int(result["peak_people"]))
+        with metric_cols[2]:
+            st.metric("Peak In Zone", int(result["peak_zone_people"]))
+        with metric_cols[3]:
             st.metric("Device", str(result["device"]))
 
         csv_path = Path(result["csv_path"])
         output_video_path = Path(result["output_video_path"])
 
-        st.subheader("Annotated Video")
+        st.subheader("Annotated Result")
         st.video(output_video_path.read_bytes())
 
         action_col1, action_col2 = st.columns(2)
@@ -236,6 +299,7 @@ def render_upload_lab() -> None:
                 data=csv_path.read_bytes(),
                 file_name=csv_path.name,
                 mime="text/csv",
+                use_container_width=True,
             )
         with action_col2:
             st.download_button(
@@ -243,67 +307,42 @@ def render_upload_lab() -> None:
                 data=output_video_path.read_bytes(),
                 file_name=output_video_path.name,
                 mime="video/mp4",
+                use_container_width=True,
             )
 
         df = pd.read_csv(csv_path)
-        if not df.empty and "people_count" in df.columns:
-            st.subheader("People Count Over Time")
-            chart_df = df[["frame_index", "people_count"]].set_index("frame_index")
-            st.line_chart(chart_df)
-            st.dataframe(df.head(20), use_container_width=True)
-
-
-def render_overview() -> None:
-    st.title("Nolan CV Dashboard")
-    st.caption("Supervision official examples + custom video analysis demo")
-
-    st.write(
-        "이 대시보드는 `roboflow/supervision` 공식 예제가 실제로 어떤 문제를 푸는지 보여주고, "
-        "같은 환경에서 직접 업로드한 영상도 테스트할 수 있게 만든 설명형 데모입니다."
-    )
-
-    metric_col1, metric_col2, metric_col3 = st.columns(3)
-    with metric_col1:
-        st.metric("Official Examples", len(EXAMPLES))
-    with metric_col2:
-        st.metric("Custom Demo Modes", 2)
-    with metric_col3:
-        st.metric("Saved Local Outputs", len(list(OUTPUTS_DIR.glob("*"))) if OUTPUTS_DIR.exists() else 0)
-
-    st.subheader("What You Can Show")
-    st.write("- 객체 추적: 같은 사람이나 차량을 프레임 간 연결")
-    st.write("- 존 카운팅: 특정 구역 안 인원 수 집계")
-    st.write("- 체류시간: 구역 안에 얼마나 오래 머무는지 분석")
-    st.write("- 히트맵: 사람들이 몰리는 위치 시각화")
-    st.write("- 속도 추정: 이동량을 기반으로 속도 분석 PoC")
-
-    st.subheader("Deployment Fit")
-    st.write(
-        "이 앱은 로컬 Windows + CUDA 환경에서는 GPU를 활용할 수 있고, "
-        "Streamlit Community Cloud에 올리면 공식 예제 갤러리와 가벼운 업로드 데모 중심으로 운영하는 구성이 적합합니다."
-    )
+        if not df.empty:
+            chart_col1, chart_col2 = st.columns(2)
+            with chart_col1:
+                st.subheader("People Count Over Time")
+                st.line_chart(df[["frame_index", "people_count"]].set_index("frame_index"))
+            with chart_col2:
+                st.subheader("Zone Count Over Time")
+                st.line_chart(df[["frame_index", "in_zone_count"]].set_index("frame_index"))
+            st.dataframe(df.head(30), use_container_width=True)
 
 
 def render_deploy_notes() -> None:
     st.header("Deploy Notes")
-    st.write("`nolan_cv.streamlit.app` 같은 주소로 올릴 수 있게 구조를 맞춰둘 수 있습니다.")
-    st.write("- 실제 배포는 GitHub 저장소와 Streamlit Community Cloud 계정 연결이 필요합니다.")
-    st.write("- Community Cloud는 배포 자체는 간단하지만 GPU가 없는 환경을 전제로 보는 편이 안전합니다.")
-    st.write("- 큰 영상 업로드가 많다면 Streamlit Cloud보다는 GPU 서버 + Streamlit 또는 FastAPI 조합이 더 안정적입니다.")
-    st.write("- 현재 앱은 로컬에서는 GPU 추론, 클라우드에서는 CPU 데모용 흐름으로 사용하기 좋게 구성했습니다.")
+    st.write("- `Official Examples`는 쇼케이스 영역입니다.")
+    st.write("- `Run Your Video`는 실제 분석 영역입니다.")
+    st.write("- Streamlit Community Cloud에서는 예제 소개와 가벼운 테스트에 적합합니다.")
+    st.write("- 긴 영상과 GPU 추론은 로컬 또는 별도 GPU 서버가 더 안정적입니다.")
 
 
 st.set_page_config(page_title="Nolan CV Dashboard", layout="wide")
 
-render_overview()
+render_header()
 
-tab1, tab2, tab3 = st.tabs(["Official Examples", "Upload Lab", "Deploy Notes"])
+page = st.sidebar.radio(
+    "Workspace",
+    options=["Run Your Video", "Official Examples", "Deploy Notes"],
+    index=0,
+)
 
-with tab1:
+if page == "Run Your Video":
+    render_upload_page()
+elif page == "Official Examples":
     render_example_gallery()
-
-with tab2:
-    render_upload_lab()
-
-with tab3:
+else:
     render_deploy_notes()
